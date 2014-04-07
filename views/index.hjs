@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+
+    <p>Henter sanntid fra holdeplasser i Trondheim og omegn.</p>
+
+    <h3>Sanntidsspørring</h3>
+    <p>(get) http://{API_URL}/rt/{stopid}</p>
+  </body>
+</html>
