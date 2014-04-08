@@ -33,7 +33,7 @@ var extract_data = function (data, cb) {
         l:   data.Orari[i].codAzLinea,
         t:   data.Orari[i].orario,
         ts:  data.Orari[i].orarioSched,
-        rt:  data.Orari[i].codAzLinea == 'Prev' ? 1 : 0,
+        rt:  data.Orari[i].statoPrevisione == 'Prev' ? 1 : 0,
         d:   data.Orari[i].capDest
       });
     }
