@@ -1,6 +1,7 @@
 var http   = require('http');
 var xml    = require('xml2js').parseString;
 var config = require('../includes/config');
+var stops  = require('../includes/data/stops');
 
 var extract_data = function (data, cb) {
   xml(data, function (err, res) {
@@ -45,12 +46,11 @@ var extract_data = function (data, cb) {
 
 /* Routes
 ----------------------------------------------------------------------------- */
-exports.index = function(req, res){
+exports.index = function (req, res){
   res.render('index', { title: 'Bybussen API'});
 };
 
-exports.rt = function(req, res){
-
+exports.rt = function (req, res){
   var env = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/"><soap12:Body><getUserRealTimeForecastExByStop xmlns="http://miz.it/infotransit"><auth><user>'+ config.USERNAME +'</user><password>'+ config.PASSWORD +'</password></auth><busStopId>' + req.params.stopid + '</busStopId><nForecast>20</nForecast></getUserRealTimeForecastExByStop></soap12:Body></soap12:Envelope>';
 
   var post_request = {
@@ -79,4 +79,8 @@ exports.rt = function(req, res){
 
   request.write( env );
   request.end();
+};
+
+exports.stops = function (req, res) {
+  res.json(stops.stops);
 };
