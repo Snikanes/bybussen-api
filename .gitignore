@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
+*.pid
 
 
 includes/config.js
