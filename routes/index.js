@@ -1,7 +1,7 @@
-var http   = require('http');
-var xml    = require('xml2js').parseString;
-var config = require('../includes/config');
-var stops  = require('../includes/data/stops');
+var http = require('http')
+, xml    = require('xml2js').parseString
+, config = require('../includes/config')
+, stops  = require('../includes/data/stops');
 
 var extract_data = function (data, cb) {
   xml(data, function (err, res) {
