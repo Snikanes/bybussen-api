@@ -3,7 +3,7 @@ Bybussen API
 
 Veldig enkel endepunkt for å hente sanntidsdata fra AtB. Dagens endepunkt for henting av sanntidsdata, _api.visuweb.no_, vil snart bli tatt ut av drift siden den blir tatt over av en annen aktør.
 
-**Bybussen API** (jeg åpen for navneendring (-:) er derfor laget for å enkelt kunne opprettholde den fantastiske tjenesten borte hos  [notifier](httå://github.com/appKom/notifier).
+**Bybussen API** (jeg åpen for navneendring (-:) er derfor laget for å enkelt kunne opprettholde den fantastiske tjenesten borte hos  [notifier](http://github.com/appKom/notifier).
 
 For å benytte seg av denne må man ha gyldig nøkkel fra [AtB](http://atb.no/). Sett bort fra at data leveres fra [AtB](http://atb.no/), har denne tjenesten ellers ingen tilknytning til [AtB](http://atb.no/).
 
