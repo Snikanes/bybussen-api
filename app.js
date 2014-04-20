@@ -1,6 +1,5 @@
 var express = require('express');
 
-var routes  = require('./routes');
 var http    = require('http');
 var path    = require('path');
 var config  = require('./config')();
@@ -25,11 +24,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/rt', routes.index);
-app.get('/rt/:stopid', routes.rt);
-app.get('/stops', routes.stops);
-
+var bb_ctrl = require('./controllers/bybussen')(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
