@@ -1,7 +1,7 @@
 var http = require('http')
 , xml    = require('xml2js').parseString
-, config = require('../includes/config')
-, stops  = require('../includes/data/stops');
+, config = require('../config')()
+, stops  = require('../data/stops');
 
 var extract_data = function (data, cb) {
   xml(data, function (err, res) {
@@ -15,7 +15,14 @@ var extract_data = function (data, cb) {
 
     var data_response = data_body.getUserRealTimeForecastExByStopResponse[0]
     , data_result     = data_response.getUserRealTimeForecastExByStopResult[0]
-    , data            = JSON.parse(data_result)
+
+
+    if (data_result == 'WsAuthenticationError') {
+      cb({error: 'WsAuthenticationError'});
+      return;
+    }
+
+    var data            = JSON.parse(data_result)
     , info            = data.InfoNodo[0];
 
     result.name       = info.descrNodo;
@@ -46,12 +53,17 @@ exports.index = function (req, res){
 };
 
 exports.rt = function (req, res){
+  if (config.atb_user === '' || config.atb_pass === '') {
+    res.json({error:'Webservice username and password missing in config file'});
+    return;
+  }
+
   if (/\D/.test(req.params.stopid)) {
     res.json({error:'Not a valid stopid'});
     return;
   }
 
-  var env = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/"><soap12:Body><getUserRealTimeForecastExByStop xmlns="http://miz.it/infotransit"><auth><user>'+ config.USERNAME +'</user><password>'+ config.PASSWORD +'</password></auth><busStopId>' + req.params.stopid + '</busStopId><nForecast>20</nForecast></getUserRealTimeForecastExByStop></soap12:Body></soap12:Envelope>';
+  var env = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/"><soap12:Body><getUserRealTimeForecastExByStop xmlns="http://miz.it/infotransit"><auth><user>'+ config.atb_user +'</user><password>'+ config.atb_pass +'</password></auth><busStopId>' + req.params.stopid + '</busStopId><nForecast>20</nForecast></getUserRealTimeForecastExByStop></soap12:Body></soap12:Envelope>';
 
   var post_request = {
     host: 'st.atb.no',
