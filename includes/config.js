@@ -1,2 +1,0 @@
-exports.USERNAME = '';
-exports.PASSWORD = '';
