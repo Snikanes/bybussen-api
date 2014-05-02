@@ -55,7 +55,7 @@ module.exports = function (app) {
   });
 
 
-  app.get('/:var(rt|bybussen/5.0/Departure/Route)?/:stopid/:api?', function (req, res){
+  app.get('/:var(rt|bybussen\/5\.0\/Departure\/Route)/:stopid/:api?', function (req, res){
     if (config.atb_user === '' || config.atb_pass === '') {
       res.json({error:'Webservice username and password missing in config file'});
       return;
