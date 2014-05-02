@@ -3,7 +3,8 @@ var config = {
     mode: 'local',
     port: 3000,
     atb_user: '',
-    atb_pass: ''
+    atb_pass: '',
+    logfile: './app.log'
   }
 };
 
