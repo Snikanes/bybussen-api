@@ -50,12 +50,12 @@ var extract_data = function (data, cb) {
 
 module.exports = function (app) {
 
-  app.get('/:route(rt)?', function (req, res) {
+  app.get('/:var(rt)?', function (req, res) {
     res.render('index', { title: 'Bybussen API'});
   });
 
 
-  app.get('/rt/:stopid', function (req, res){
+  app.get('/:var(rt|bybussen/5.0/Departure/Route)?/:stopid/:api?', function (req, res){
     if (config.atb_user === '' || config.atb_pass === '') {
       res.json({error:'Webservice username and password missing in config file'});
       return;
