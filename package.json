@@ -6,7 +6,8 @@
     "express": "3.5.1",
     "hjs": "*",
     "xml2js":"0.4.2",
-    "daemonize2":"0.4.2"
+    "daemonize2":"0.4.2",
+    "request": "*"
   },
   "jshintConfig": {
     "laxcomma": true
