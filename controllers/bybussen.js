@@ -1,8 +1,8 @@
-var http  = require('http')
-, xml     = require('xml2js').parseString
-, config  = require('../config')()
+var config  = require('../config')()
+, http  = require('http')
 , request = require('request')
-, stops   = require('../data/stops');
+, stops   = require('../data/stops')
+, xml     = require('xml2js').parseString;
 
 var extract_data = function (data, cb) {
   xml(data, function (err, res) {
@@ -31,15 +31,15 @@ var extract_data = function (data, cb) {
 
     result.next       = [];
 
-    for (var i = 0; i < data.Orari.length; i++) {
+    data.Orari.forEach(function (departure) {
       result.next.push({
-        l:   data.Orari[i].codAzLinea,
-        t:   data.Orari[i].orario,
-        ts:  data.Orari[i].orarioSched,
-        rt:  data.Orari[i].statoPrevisione == 'Prev' ? 1 : 0,
-        d:   data.Orari[i].capDest
+        l:   departure.codAzLinea,
+        t:   departure.orario,
+        ts:  departure.orarioSched,
+        rt:  departure.statoPrevisione == 'Prev' ? 1 : 0,
+        d:   departure.capDest
       });
-    }
+    });
 
     cb(result);
   });
@@ -55,7 +55,7 @@ module.exports = function (app) {
     res.render('index', { title: 'Bybussen API'});
   });
 
-  app.get('/:var(oracle|bybussen/5.0/Oracle)/:query', function (req, res) {
+  app.get('/oracle/:query', function (req, res) {
     request('http://m.atb.no/xmlhttprequest.php?service=routeplannerOracle.getOracleAnswer&question=' + req.params.query, function (error, response, body) {
       if (!error && response.statusCode == 200) {
         body = body.replace(/\n/g, '');
