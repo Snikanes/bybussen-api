@@ -14,5 +14,8 @@
 
     <h3>Holdeplasser</h3>
     <p>(get) http://{API_URL}/stops</p>
+
+    <h3>Bussorakelet</h3>
+    <p>(get) http://{API_URL}/oracle/{query}</p>
   </body>
 </html>
