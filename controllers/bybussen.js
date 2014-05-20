@@ -1,7 +1,8 @@
-var http = require('http')
-, xml    = require('xml2js').parseString
-, config = require('../config')()
-, stops  = require('../data/stops');
+var http  = require('http')
+, xml     = require('xml2js').parseString
+, config  = require('../config')()
+, request = require('request')
+, stops   = require('../data/stops');
 
 var extract_data = function (data, cb) {
   xml(data, function (err, res) {
@@ -54,8 +55,17 @@ module.exports = function (app) {
     res.render('index', { title: 'Bybussen API'});
   });
 
+  app.get('/:var(oracle|bybussen/5.0/Oracle)/:query', function (req, res) {
+    request('http://m.atb.no/xmlhttprequest.php?service=routeplannerOracle.getOracleAnswer&question=' + req.params.query, function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        body = body.replace(/\n/g, '');
+        body = body.replace(/([a-zA-Z])\.([a-zA-Z])/g, '$1.<br>$2');
+        res.send(body);
+      }
+    });
+  });
 
-  app.get('/:var(rt|bybussen\/5\.0\/Departure\/Route)/:stopid/:api?', function (req, res){
+  app.get('/:var(rt|bybussen/5.0/Departure/Route)/:stopid/:api?', function (req, res){
     if (config.atb_user === '' || config.atb_pass === '') {
       res.json({error:'Webservice username and password missing in config file'});
       return;
