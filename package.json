@@ -1,15 +1,15 @@
 {
-  "name": "Bybussen-API",
+  "name": "bybussen",
   "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "express": "3.5.1",
-    "hjs": "*",
-    "xml2js":"0.4.2",
-    "daemonize2":"0.4.2",
-    "request": "*"
+  "author": {
+    "name": "Tri M. Nguyen",
+    "email": "mail@trimn.net",
+    "url": "http://tmn.io"
   },
-  "jshintConfig": {
-    "laxcomma": true
+  "license": "MIT",
+  "dependencies": {
+    "express": "4.5.1",
+    "xml2js": "0.4.4",
+    "request": "2.37.0"
   }
 }
