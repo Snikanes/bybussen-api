@@ -1,7 +1,7 @@
 {
   "name": "bybussen",
-  "version": "1.0.0",
-  "description": "a middleware for the public transport realtime data in Trondheim, Norway",
+  "version": "1.0.2",
+  "description": "A very simple middleware for the public transport realtime data in Trondheim, Norway",
   "author": {
     "name": "Tri M. Nguyen",
     "email": "mail@trimn.net",
@@ -12,5 +12,7 @@
     "express": "4.5.1",
     "xml2js": "0.4.4",
     "request": "2.37.0"
-  }
+  },
+  "repository": "https://github.com/tmn/Bybussen-API",
+
 }
