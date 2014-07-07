@@ -1,5 +1,4 @@
-Bybussen API
-============
+# bybussen
 
 Veldig enkel endepunkt for å hente sanntidsdata fra AtB. Dagens endepunkt for henting av sanntidsdata, _api.visuweb.no_, vil snart bli tatt ut av drift siden den blir tatt over av en annen aktør.
 
@@ -10,8 +9,19 @@ For å benytte seg av denne må man ha gyldig nøkkel fra [AtB](http://atb.no/).
 ### Kom i gang med
 
 ```
-npm install
-npm start
+npm install bybussen
+```
+
+Serveren startes opp med:
+
+```
+var bybussen = require('bybussen')
+var options = {
+  user: '',
+  pass: '',
+  port: 3000
+}
+bybussen(options)
 ```
 
 ***
