@@ -20,8 +20,7 @@ var bybussen = require('bybussen')
 
 var options = {
   user: '',
-  pass: '',
-  port: 3000
+  pass: ''
 }
 
 http.createServer(bybussen(options)).listen(3000)
