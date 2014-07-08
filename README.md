@@ -15,13 +15,16 @@ npm install bybussen
 Serveren startes opp med:
 
 ```
+var http = require('http')
 var bybussen = require('bybussen')
+
 var options = {
   user: '',
   pass: '',
   port: 3000
 }
-bybussen(options)
+
+http.createServer(bybussen(options)).listen(3000)
 ```
 
 ***
