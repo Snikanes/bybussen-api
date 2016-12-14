@@ -1,8 +1,8 @@
 const express = require('express')
-, haversine = require('./haversine')
+, haversine = require('haversine')
 , http = require('http')
 , https = require('https')
-, log  = require('./logger')
+, logger  = require('./logger')
 , stops = require('./data/stops').stops
 , xml = require('xml2js').parseString
 
@@ -53,8 +53,8 @@ const extract_data =  (data, cb) => {
 // Routes
 //
 //------------------------------------------------------------------------------
-module.exports = (options) => {
-  log('Starting...')
+const Bybussen = (options) => {
+  logger('Starting...')
 
   app.get('/oracle/:query', (req, res) => {
     https.get('https://m.atb.no/xmlhttprequest.php?service=routeplannerOracle.getOracleAnswer&question=' + req.params.query, (response) => {
@@ -66,7 +66,7 @@ module.exports = (options) => {
       if (statusCode !== 200) {
         const error = new Error(`Request Failed.\nStatus Code: ${statusCode}`)
 
-        log(error)
+        logger(error)
         response.resume()
 
         return
@@ -112,7 +112,7 @@ module.exports = (options) => {
       r.on('end', () => {
         extract_data(buffer, (err, data) => {
           if (err) {
-            log(JSON.stringify(err))
+            logger(JSON.stringify(err))
             res.json(err)
           }
 
@@ -132,8 +132,11 @@ module.exports = (options) => {
   app.get('/stops/nearest/:lat/:lon', (req, res) => {
     const new_stops = stops.map((stop) => {
       return Object.assign({}, stop, {
-        distance: haversine(parseFloat(req.params.lat), parseFloat(req.params.lon), stop.latitude, stop.longitude)
-      });
+        distance: haversine(
+          { latitude: parseFloat(req.params.lat), longitude: parseFloat(req.params.lon) },
+          { latitude: stop.latitude, longitude: stop.longitude}
+        )
+      })
     })
 
     new_stops.sort((a, b) => a.distance - b.distance)
@@ -145,5 +148,7 @@ module.exports = (options) => {
 }
 
 process.on('uncaughtException', (err) => {
-  log(err.stack)
+  logger(err.stack)
 })
+
+module.exports = Bybussen
