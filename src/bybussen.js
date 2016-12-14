@@ -129,11 +129,11 @@ const Bybussen = (options) => {
     res.json(stops)
   })
 
-  app.get('/stops/nearest/:lat/:lon', (req, res) => {
+  app.get('/stops/nearest/:lat/:lon/:limit?', (req, res) => {
     const new_stops = stops.map((stop) => {
       return Object.assign({}, stop, {
         distance: haversine(
-          { latitude: parseFloat(req.params.lat), longitude: parseFloat(req.params.lon) },
+          { latitude: req.params.lat, longitude: req.params.lon },
           { latitude: stop.latitude, longitude: stop.longitude}
         )
       })
@@ -141,7 +141,7 @@ const Bybussen = (options) => {
 
     new_stops.sort((a, b) => a.distance - b.distance)
 
-    res.json(new_stops.slice(0, 20))
+    res.json(new_stops.slice(0, req.params.limit || 20))
   })
 
   return app
