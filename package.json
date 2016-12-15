@@ -1,6 +1,6 @@
 {
   "name": "bybussen",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A very simple middleware for the public transport realtime data in Trondheim, Norway",
   "author": {
     "name": "Tri M. Nguyen",
