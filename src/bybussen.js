@@ -132,10 +132,10 @@ const Bybussen = (options) => {
   app.get('/stops/nearest/:lat/:lon/:limit?', (req, res) => {
     const new_stops = stops.map((stop) => {
       return Object.assign({}, stop, {
-        distance: haversine(
+        distance: Math.floor(haversine(
           { latitude: req.params.lat, longitude: req.params.lon },
           { latitude: stop.latitude, longitude: stop.longitude}
-        )
+        ))
       })
     })
 
