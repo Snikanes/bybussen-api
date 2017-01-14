@@ -26,6 +26,7 @@ const extract_siri = (data, cb) => {
 
     cb(null, {
       name: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointName[0],
+      locationId: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointRef[0],
       next: departures.map(d => {
         const departure = d.MonitoredVehicleJourney[0]
         return {
