@@ -8,6 +8,14 @@ const express = require('express')
 
 const app = express()
 
+// TODO: next version shouldnt need this transform
+const format_date = (date_string) => {
+  let date = date_string.substring(0, 10)
+  let time = date_string.substring(11, 16)
+
+  return `${ date.substring(8,10) }.${ date.substring(5,7) }.${ date.substring(0,4) } ${ time }`
+}
+
 const extract_siri = (data, cb) => {
   xml(data, (err, res) => {
     if (err) {
@@ -22,8 +30,8 @@ const extract_siri = (data, cb) => {
         const departure = d.MonitoredVehicleJourney[0]
         return {
           l: departure.LineRef[0],
-          t: departure.Monitored[0] === 'true' ? departure.MonitoredCall[0].ExpectedDepartureTime[0] :  departure.MonitoredCall[0].AimedDepartureTime[0],
-          ts: departure.MonitoredCall[0].AimedDepartureTime[0],
+          t: departure.Monitored[0] === 'true' ? format_date(departure.MonitoredCall[0].ExpectedDepartureTime[0]) : format_date(departure.MonitoredCall[0].AimedDepartureTime[0]),
+          ts: format_date(departure.MonitoredCall[0].AimedDepartureTime[0]),
           rt: departure.Monitored[0] === 'true',
           d: departure.DestinationName[0]
         }
