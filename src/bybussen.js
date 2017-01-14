@@ -8,6 +8,30 @@ const express = require('express')
 
 const app = express()
 
+const extract_siri = (data, cb) => {
+  xml(data, (err, res) => {
+    if (err) {
+      return cb(err)
+    }
+
+    const departures = res['s:Envelope']['s:Body'][0]['GetStopMonitoringResponse'][0]['Answer'][0]['StopMonitoringDelivery'][0]['MonitoredStopVisit']
+
+    cb(null, {
+      name: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointName[0],
+      next: departures.map(d => {
+        const departure = d.MonitoredVehicleJourney[0]
+        return {
+          l: departure.LineRef[0],
+          t: departure.Monitored[0] === 'true' ? departure.MonitoredCall[0].ExpectedDepartureTime[0] :  departure.MonitoredCall[0].AimedDepartureTime[0],
+          ts: departure.MonitoredCall[0].AimedDepartureTime[0],
+          rt: departure.Monitored[0] === 'true',
+          d: departure.DestinationName[0]
+        }
+      })
+    })
+  })
+}
+
 const extract_data =  (data, cb) => {
   xml(data, (err, res) => {
     if (err) {
@@ -80,6 +104,59 @@ const Bybussen = (options) => {
         res.send(body)
       })
     })
+  })
+
+  app.get('/rt2/:stopid', (req, res) => {
+    if (/\D/.test(req.params.stopid)) {
+      return res.json({ error:'Not a valid stopid' })
+    }
+
+    const env = `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:r="http://www.siri.org.uk/siri">
+   <s:Header/>
+   <s:Body>
+      <r:GetStopMonitoring>
+         <ServiceRequestInfo>
+            <r:RequestorRef>io.tmn</r:RequestorRef>
+         </ServiceRequestInfo>
+         <Request version="1.4">
+            <r:PreviewInterval>P0DT2H0M0.000S</r:PreviewInterval>
+            <r:MonitoringRef>${ req.params.stopid }</r:MonitoringRef>
+         </Request>
+      </r:GetStopMonitoring>
+   </s:Body>
+</s:Envelope>`;
+
+    const post_request = {
+      host: 'st.atb.no',
+      path: '/SMWS/SMService.svc',
+      port: 80,
+      method: 'POST',
+      headers: {
+        'SOAPAction': 'GetStopMonitoring',
+        'Cookie': 'cookie',
+        'Content-Type': 'text/xml; charset="utf-8"',
+        'Content-Length': Buffer.byteLength(env)
+      }
+    }
+
+    const request = http.request(post_request, r => {
+      let buffer = ''
+
+      r.on('data', (data) => buffer += data)
+      r.on('end', () => {
+        extract_siri(buffer, (err, data) => {
+          if (err) {
+            res.json(err)
+          }
+
+          res.json(data)
+        })
+      })
+    })
+
+    request.write(env)
+    request.end()
   })
 
   app.get('/rt/:stopid', (req, res) => {
