@@ -33,7 +33,7 @@ const extract_siri = (data, cb) => {
           l: departure.LineRef[0],
           t: departure.Monitored[0] === 'true' ? format_date(departure.MonitoredCall[0].ExpectedDepartureTime[0]) : format_date(departure.MonitoredCall[0].AimedDepartureTime[0]),
           ts: format_date(departure.MonitoredCall[0].AimedDepartureTime[0]),
-          rt: departure.Monitored[0] === 'true',
+          rt: departure.Monitored[0] === 'true' ? 1 : 0,
           d: departure.DestinationName[0]
         }
       })
