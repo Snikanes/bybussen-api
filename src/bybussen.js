@@ -27,7 +27,7 @@ const extract_siri = (data, cb) => {
     cb(null, {
       name: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointName[0],
       locationId: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointRef[0],
-      next: departures.map(d => {
+      next: departures.slice(0, 20).map(d => {
         const departure = d.MonitoredVehicleJourney[0]
         return {
           l: departure.LineRef[0],
@@ -129,7 +129,7 @@ const Bybussen = (options) => {
             <r:RequestorRef>io.tmn</r:RequestorRef>
          </ServiceRequestInfo>
          <Request version="1.4">
-            <r:PreviewInterval>P0DT2H0M0.000S</r:PreviewInterval>
+            <r:PreviewInterval>P0DT5H0M0.000S</r:PreviewInterval>
             <r:MonitoringRef>${ req.params.stopid }</r:MonitoringRef>
          </Request>
       </r:GetStopMonitoring>
