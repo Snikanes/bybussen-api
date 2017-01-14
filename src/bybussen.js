@@ -106,7 +106,7 @@ const Bybussen = (options) => {
     })
   })
 
-  app.get('/rt2/:stopid', (req, res) => {
+  app.get('/rt/:stopid', (req, res) => {
     if (/\D/.test(req.params.stopid)) {
       return res.json({ error:'Not a valid stopid' })
     }
@@ -159,7 +159,7 @@ const Bybussen = (options) => {
     request.end()
   })
 
-  app.get('/rt/:stopid', (req, res) => {
+  app.get('/rt_old/:stopid', (req, res) => {
     if (options.user === '' || options.pass === '') {
       return res.json({ error: 'Webservice username and password missing' })
     }
