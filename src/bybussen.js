@@ -133,7 +133,7 @@ const Bybussen = (options) => {
             <r:RequestorRef>io.tmn</r:RequestorRef>
          </ServiceRequestInfo>
          <Request version="1.4">
-            <r:PreviewInterval>P0DT5H0M0.000S</r:PreviewInterval>
+            <r:PreviewInterval>P0DT10H0M0.000S</r:PreviewInterval>
             <r:MonitoringRef>${ req.params.stopid }</r:MonitoringRef>
          </Request>
       </r:GetStopMonitoring>
