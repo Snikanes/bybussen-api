@@ -22,6 +22,10 @@ const extract_siri = (data, cb) => {
       return cb(err)
     }
 
+    if (res['s:Envelope']['s:Body'][0]['GetStopMonitoringResponse'][0]['Answer'][0]['StopMonitoringDelivery'][0]['ErrorCondition']) {
+      return cb({ error: res['s:Envelope']['s:Body'][0]['GetStopMonitoringResponse'][0]['Answer'][0]['StopMonitoringDelivery'][0]['ErrorCondition'][0]['Description'][0] });
+    }
+
     const departures = res['s:Envelope']['s:Body'][0]['GetStopMonitoringResponse'][0]['Answer'][0]['StopMonitoringDelivery'][0]['MonitoredStopVisit']
 
     cb(null, {
