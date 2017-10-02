@@ -7,6 +7,9 @@
     "email": "mail@trimn.net",
     "url": "http://tmn.io"
   },
+  "scripts": {
+    "start": "node src/main.js"
+  },
   "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
