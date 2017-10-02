@@ -65,6 +65,8 @@ const Bybussen = () => {
             return res.json({ error: 'Not a valid stopid' })
         }
 
+        const limit = req.query.limit || 20
+
         const env = getStopRequestEnvelope(req.params.stopid)
 
         const post_request = {
@@ -85,13 +87,13 @@ const Bybussen = () => {
 
             r.on('data', (data) => buffer += data)
             r.on('end', () => {
-                extractSiri(buffer, (err, data) => {
+                extractSiri(buffer, (err, data)=> {
                     if (err) {
                         res.json(err)
                     }
 
                     res.json(data)
-                })
+                }, limit)
             })
         })
 

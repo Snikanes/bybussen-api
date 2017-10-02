@@ -8,7 +8,7 @@ const formatDate = (dateString) => {
     return `${ date.substring(8, 10) }.${ date.substring(5, 7) }.${ date.substring(0, 4) } ${ time }`
 }
 
-const extractSiri = (data, cb, numberOfDepartures=20, offset=0) => {
+const extractSiri = (data, cb, numberOfDepartures) => {
     xml(data, (err, res) => {
         if (err) {
             return cb(err)
@@ -23,7 +23,7 @@ const extractSiri = (data, cb, numberOfDepartures=20, offset=0) => {
         cb(null, {
             name: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointName[0],
             locationId: departures[0].MonitoredVehicleJourney[0].MonitoredCall[0].StopPointRef[0],
-            next: departures.slice(offset, numberOfDepartures).map(d => {
+            next: departures.slice(0, numberOfDepartures).map(d => {
                 const departure = d.MonitoredVehicleJourney[0]
                 return {
                     l: departure.LineRef[0],
