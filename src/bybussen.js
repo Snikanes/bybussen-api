@@ -5,9 +5,7 @@ const express = require('express')
     , logger = require('./logger')
     , stops = require('./data/stops').stops
 
-const extractSiri = require('./siriExtract').extractSiri
-    , extractData = require('./siriExtract').extractData
-
+const extractSiri = require('./siriExtract')
 const app = express()
 
 //+-----------------------------------------------------------------------------
@@ -85,49 +83,6 @@ const Bybussen = (options) => {
             r.on('end', () => {
                 extractSiri(buffer, (err, data) => {
                     if (err) {
-                        res.json(err)
-                    }
-
-                    res.json(data)
-                })
-            })
-        })
-
-        request.write(env)
-        request.end()
-    })
-
-    app.get('/rt_old/:stopid', (req, res) => {
-        if (options.user === '' || options.pass === '') {
-            return res.json({ error: 'Webservice username and password missing' })
-        }
-
-        if (/\D/.test(req.params.stopid)) {
-            return res.json({ error: 'Not a valid stopid' })
-        }
-
-        const env = '<?xml version="1.0" encoding="utf-8"?><soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/soap/envelope/"><soap12:Body><getUserRealTimeForecastExByStop xmlns="http://miz.it/infotransit"><auth><user>' + options.user + '</user><password>' + options.pass + '</password></auth><handShakeUser><user>tmn</user><token>tmn-best</token><response>Success</response></handShakeUser><busStopId>' + req.params.stopid + '</busStopId><nForecast>20</nForecast></getUserRealTimeForecastExByStop></soap12:Body></soap12:Envelope>'
-
-        const post_request = {
-            host: 'st.atb.no',
-            path: '/New/InfoTransit/userservices.asmx',
-            port: 80,
-            method: 'POST',
-            headers: {
-                'Cookie': 'cookie',
-                'Content-Type': 'text/xml; charset="utf-8"',
-                'Content-Length': Buffer.byteLength(env)
-            }
-        }
-
-        const request = http.request(post_request, (r) => {
-            let buffer = ''
-
-            r.on('data', (data) => buffer += data)
-            r.on('end', () => {
-                extractData(buffer, (err, data) => {
-                    if (err) {
-                        logger(JSON.stringify(err))
                         res.json(err)
                     }
 
