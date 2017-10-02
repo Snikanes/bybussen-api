@@ -1,3 +1,5 @@
+.ebextensions
+.elasticbeanstalk
+app.log
 .idea
-*.log
 node_modules
