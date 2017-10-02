@@ -8,12 +8,30 @@ const express = require('express')
 const extractSiri = require('./siriExtract')
 const app = express()
 
+const getStopRequestEnvelope = stopid => {
+    return `<?xml version="1.0" encoding="utf-8"?>
+                <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:r="http://www.siri.org.uk/siri">
+                   <s:Header/>
+                   <s:Body>
+                      <r:GetStopMonitoring>
+                         <ServiceRequestInfo>
+                            <r:RequestorRef>io.tmn</r:RequestorRef>
+                         </ServiceRequestInfo>
+                         <Request version="1.4">
+                            <r:PreviewInterval>P0DT10H0M0.000S</r:PreviewInterval>
+                            <r:MonitoringRef>${ stopid }</r:MonitoringRef>
+                         </Request>
+                      </r:GetStopMonitoring>
+                   </s:Body>
+                </s:Envelope>`
+}
+
 //+-----------------------------------------------------------------------------
 //
 // Routes
 //
 //------------------------------------------------------------------------------
-const Bybussen = (options) => {
+const Bybussen = () => {
     logger('Starting...')
 
     app.get('/oracle/:query', (req, res) => {
@@ -47,21 +65,7 @@ const Bybussen = (options) => {
             return res.json({ error: 'Not a valid stopid' })
         }
 
-        const env = `<?xml version="1.0" encoding="utf-8"?>
-                        <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" xmlns:r="http://www.siri.org.uk/siri">
-                           <s:Header/>
-                           <s:Body>
-                              <r:GetStopMonitoring>
-                                 <ServiceRequestInfo>
-                                    <r:RequestorRef>io.tmn</r:RequestorRef>
-                                 </ServiceRequestInfo>
-                                 <Request version="1.4">
-                                    <r:PreviewInterval>P0DT10H0M0.000S</r:PreviewInterval>
-                                    <r:MonitoringRef>${ req.params.stopid }</r:MonitoringRef>
-                                 </Request>
-                              </r:GetStopMonitoring>
-                           </s:Body>
-                        </s:Envelope>`
+        const env = getStopRequestEnvelope(req.params.stopid)
 
         const post_request = {
             host: 'st.atb.no',
