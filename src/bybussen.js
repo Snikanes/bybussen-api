@@ -60,6 +60,10 @@ const Bybussen = () => {
         })
     })
 
+    app.get('/', (req, res) => {
+        return res.json({ message: 'THis is index'})
+    })
+
     app.get('/rt/:stopid', (req, res) => {
         if (/\D/.test(req.params.stopid)) {
             return res.json({ error: 'Not a valid stopid' })
