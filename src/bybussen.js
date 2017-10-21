@@ -78,6 +78,8 @@ const Bybussen = () => {
     app.get('/stops', (req, res) => {
         res.json(stops)
     })
+
+    return app
 }
 
 process.on('uncaughtException', (err) => {
